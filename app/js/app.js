@@ -15,24 +15,21 @@ app.controller("MainController", function ($scope) {
 
 
     $scope.add = function () {
-        var file = $scope.myFile;
-        console.log('file is ');
-        console.dir(file);
+        let file = $scope.myFile;
 
         //var input1 = angular.element(document.querySelector('#file1'));
         EmbarkJS.Storage.uploadFile(file).then(function (hash) {
             console.log('hash for uploaded file = ', hash);
+            SmartTrace.set(150);
+            SmartTrace.get().then(function (value) { console.log("smart contract value = ", value.toNumber()) });
+
+        }).catch(function (err) {
+            if (err) {
+                console.log("IPFS save file Error => " + err.message);
+            }
         });
 
-        EmbarkJS.Storage.saveText("hello world")
-            .then(function (hash) {
-                console.log("saving file === ", hash);
-            })
-            .catch(function (err) {
-                if (err) {
-                    console.log("IPFS saveText Error => " + err.message);
-                }
-            });
+
     }
 
 });

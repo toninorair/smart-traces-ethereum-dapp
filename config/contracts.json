@@ -2,6 +2,11 @@
   "default": {
     "gas": "auto",
     "contracts": {
+      "SmartTrace": {
+        "args": [
+          100
+        ]
+      }
     }
   }
 }

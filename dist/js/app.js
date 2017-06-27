@@ -78469,7 +78469,7 @@ var whenEnvIsLoaded = function(cb) {
   }
 }
 whenEnvIsLoaded(function() {
-SmartTrace = new EmbarkJS.Contract({abi: [{"constant":true,"inputs":[],"name":"storedData","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"retVal","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[{"name":"initialValue","type":"uint256"}],"payable":false,"type":"constructor"}], address: '0x8567fdab15211046d43221d563898f60ea7f7fb7', code: '606060405234610000576040516020806100f083398101604052515b60008190555b505b60bf806100316000396000f300606060405263ffffffff60e060020a6000350416632a1afcd98114603657806360fe47b11460525780636d4ce63c146061575b6000565b346000576040607d565b60408051918252519081900360200190f35b34600057605f6004356083565b005b346000576040608c565b60408051918252519081900360200190f35b60005481565b60008190555b50565b6000545b905600a165627a7a7230582063ebbc2793912516fdf15c0ea0fa59f934677887136fea271db43e95e61d6d2f0029', gasEstimates: {"creation":[20131,38200],"external":{"get()":269,"set(uint256)":20163,"storedData()":224},"internal":{}}});
+SmartTrace = new EmbarkJS.Contract({abi: [{"constant":true,"inputs":[],"name":"storedData","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"retVal","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[{"name":"initialValue","type":"uint256"}],"payable":false,"type":"constructor"}], address: '0xd858e5c09ab99594b3ec8ae68bbd2104b3117238', code: '606060405234610000576040516020806100f083398101604052515b60008190555b505b60bf806100316000396000f300606060405263ffffffff60e060020a6000350416632a1afcd98114603657806360fe47b11460525780636d4ce63c146061575b6000565b346000576040607d565b60408051918252519081900360200190f35b34600057605f6004356083565b005b346000576040608c565b60408051918252519081900360200190f35b60005481565b60008190555b50565b6000545b905600a165627a7a7230582063ebbc2793912516fdf15c0ea0fa59f934677887136fea271db43e95e61d6d2f0029', gasEstimates: {"creation":[20131,38200],"external":{"get()":269,"set(uint256)":20163,"storedData()":224},"internal":{}}});
 });
 
 EmbarkJS.Storage.setProvider('ipfs', {server: 'localhost', port: '5001'});
@@ -78492,24 +78492,21 @@ app.controller("MainController", function ($scope) {
 
 
     $scope.add = function () {
-        var file = $scope.myFile;
-        console.log('file is ');
-        console.dir(file);
+        let file = $scope.myFile;
 
         //var input1 = angular.element(document.querySelector('#file1'));
         EmbarkJS.Storage.uploadFile(file).then(function (hash) {
             console.log('hash for uploaded file = ', hash);
+            SmartTrace.set(150);
+            SmartTrace.get().then(function (value) { console.log("smart contract value = ", value.toNumber()) });
+
+        }).catch(function (err) {
+            if (err) {
+                console.log("IPFS save file Error => " + err.message);
+            }
         });
 
-        EmbarkJS.Storage.saveText("hello world")
-            .then(function (hash) {
-                console.log("saving file === ", hash);
-            })
-            .catch(function (err) {
-                if (err) {
-                    console.log("IPFS saveText Error => " + err.message);
-                }
-            });
+
     }
 
 });
