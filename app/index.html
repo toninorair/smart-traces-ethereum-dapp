@@ -13,13 +13,11 @@
 
     <div id="mapid"></div>
     <br>
-    <div id='content' ng-controller='MainController'>
-        <input type='text' ng-model='inputValue' />Your address in ethereum network is {{inputValue}}
-
+    <div id='content' ng-controller='MainController' ng-init="init()">
         <br><br>
         <input type="file" file-model="myFile" />
         <button ng-click="add()">Add</button>
-        <!--<button ng-click="uploadFile()">Add media map message</button>-->
+        <button ng-click="update()">Update</button>
     </div>
 </body>
 

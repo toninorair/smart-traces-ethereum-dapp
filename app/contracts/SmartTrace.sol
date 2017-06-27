@@ -11,11 +11,11 @@ contract SmartTrace {
 
   MediaMessage[] public msgs;
 
-  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long) returns (uint) {
+  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long) returns (bool) {
         MediaMessage memory temp = MediaMessage(msg.sender, media_hash, text_hash, lat, long);
         msgs.push(temp);
 
-        return 1;
+        return true;
         
   }
 
