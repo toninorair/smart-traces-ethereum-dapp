@@ -1,11 +1,10 @@
 {
   "default": {
-    "gas": "auto",
+    "gas": 90000000000,
     "contracts": {
       "SmartTrace": {
-        "args": [
-          100
-        ]
+        "gas" : 800000
+        
       }
     }
   }

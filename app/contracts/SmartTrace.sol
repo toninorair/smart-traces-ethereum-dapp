@@ -1,15 +1,37 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.6;
 contract SmartTrace {
-  uint public storedData;
+  
+  struct MediaMessage {
+    address sender;
+		string media_hash;
+		string text_hash;
+		int64 lat;
+		int64 long;
+	}
 
-  function SmartTrace(uint initialValue) {
-    storedData = initialValue;
+  MediaMessage[] public msgs;
+
+  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long) returns (uint) {
+        MediaMessage memory temp = MediaMessage(msg.sender, media_hash, text_hash, lat, long);
+        msgs.push(temp);
+
+        return 1;
+        
   }
 
-  function set(uint x) {
-    storedData = x;
+  function getMsgsCount() constant returns(uint){
+    return msgs.length;
   }
-  function get() constant returns (uint retVal) {
-    return storedData;
+
+  function messageExists(uint index) constant returns (bool){
+		if (index < msgs.length) return true;
+		return false;
+	}
+
+  function getMediaMsg(uint index) constant returns (address, string, string, int64, int64) {
+     if (messageExists(index)) {
+       return (msgs[index].sender, msgs[index].media_hash, msgs[index].text_hash, msgs[index].lat, msgs[index].long);
+     }
   }
+	
 }
