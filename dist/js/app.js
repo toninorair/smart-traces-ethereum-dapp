@@ -78477,8 +78477,11 @@ EmbarkJS.Storage.setProvider('ipfs', {server: 'localhost', port: '5001'});
 EmbarkJS.Messages.setProvider('whisper');
 var app = angular.module('ethereum-maps-app', []);
 
+EmbarkJS.Storage.setProvider('ipfs', { server: 'localhost', port: '5001' });
+
 app.controller("MainController", function ($scope) {
-    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    let mymap = L.map('mapid', {doubleClickZoom: false}).setView([51.505, -0.09], 13);
+    //let mymap = L.map('mapid', {doubleClickZoom: false}).locate({setView: true, maxZoom: 16});
     $scope.inputValue = "rafafr45535344347gcbgg";
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYW50b25pbmFub3JhaXIiLCJhIjoiY2o0ZXk0MGU0MDhsMzMzcGVrb3VnZjgzdiJ9.y0S_YAafMGjTRS9Wenuh9Q', {
@@ -78488,7 +78491,6 @@ app.controller("MainController", function ($scope) {
         accessToken: 'your.mapbox.access.token'
     }).addTo(mymap);
 
-    EmbarkJS.Storage.setProvider('ipfs', { server: 'localhost', port: '5001' })
 
 
     $scope.add = function () {
@@ -78499,6 +78501,15 @@ app.controller("MainController", function ($scope) {
             console.log('hash for uploaded file = ', hash);
             SmartTrace.set(150);
             SmartTrace.get().then(function (value) { console.log("smart contract value = ", value.toNumber()) });
+
+            // var popup = L.popup()
+            //     .setLatLng([, -0.09])
+            //     .setContent("I was saved with hash" + hash)
+            //     .openOn(mymap);
+
+            var marker = L.marker([51.5, -0.09]).addTo(mymap);
+
+            marker.bindPopup("<a href=\"http://localhost:8080/ipfs/" + hash + "\">I saved this for you</a>").openPopup();
 
         }).catch(function (err) {
             if (err) {
