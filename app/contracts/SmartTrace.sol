@@ -11,11 +11,9 @@ contract SmartTrace {
 
   MediaMessage[] public msgs;
 
-  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long) returns (bool) {
+  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long) {
         MediaMessage memory temp = MediaMessage(msg.sender, media_hash, text_hash, lat, long);
         msgs.push(temp);
-
-        return true;
         
   }
 
@@ -31,6 +29,7 @@ contract SmartTrace {
   function getMediaMsg(uint index) constant returns (address, string, string, int64, int64) {
      if (messageExists(index)) {
        return (msgs[index].sender, msgs[index].media_hash, msgs[index].text_hash, msgs[index].lat, msgs[index].long);
+
      }
   }
 	

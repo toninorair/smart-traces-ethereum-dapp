@@ -12,7 +12,7 @@ app.service('MapUtilsService', function () {
             console.log("number of messages = ", length);
             for (i = 0; i < length; i++) {
                 contract.getMediaMsg(i).then(function (data) {
-                    console.log(`Result for index = ${i}`, data);
+                    console.log(`Result for index`, data);
                     service.addMessageOnMap(data, map);
                 });
             }
@@ -23,14 +23,17 @@ app.service('MapUtilsService', function () {
         return `http://localhost:8080/ipfs/${mediaHash}`;
     }
 
-    service.addMessageOnMap = function (data, map) {
+    service.addMessageOnMap = function (data, mymap) {
+        console.log("Add message on map");
         let mediaHash = data[1];
         let textHash = data[2];
-        let lat = data[3].toNumber();
-        let long = data[4].toNumber();
+        let lat = data[3] / 100000;
+        let long = data[4] / 100000;
+        console.log("lat = ", data[3], " long = ", data[4]);
+        console.log("lat = ", lat, "long = ", long);
 
         EmbarkJS.Storage.get(textHash).then(function (messageText) {
-            service.addMarker(lat, long, mediaHash, messageText, map);
+            service.addMarker(lat, long, mediaHash, messageText, mymap);
         });
     }
 
@@ -55,40 +58,25 @@ app.controller("MainController", function ($scope, MapUtilsService) {
         }).addTo($scope.mymap);
 
         $scope.mymap.on('click', onMapClick);
-
-        $scope.mymap.on('load', onMapLoaded)
-
-        //MapUtilsService.addAllMessagesOnTheMap($scope.mymap, $rootScope.contract);
-
     }
 
-    let onMapLoaded = function(e) {
-        console.log("Map was loaded");
-        $scope.update();
-    }
 
     let onMapClick = function (e) {
-        alert("You clicked the map at " + e.latlng);
-
+        console.log('on map clicked');
         let file = $scope.myFile;
         let text = "hello world";
-        let lat = e.latlng.lat;
-        let long = e.latlng.lng;
+        let lat = Math.trunc(e.latlng.lat * 100000) ;
+        let long = Math.trunc(e.latlng.lng * 100000);
+
+
 
         Promise.all([EmbarkJS.Storage.saveText(text), EmbarkJS.Storage.uploadFile(file)])
             .then(hashes => {
-                SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long, { gas: 500000 })
+                SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long , { gas: 500000 })
                     .then(function (value) {
-                        self.lat += 0.2;
-                        self.long += 0.2;
                         console.log("value = ", value);
-                        MapUtilsService.addMarker(lat, long, hashes[1], text, $scope.mymap);
-
-                        SmartTrace.getMsgsCount().then(function (data) {
-                            let length = data.toNumber();
-                            console.log("number of messages = ", length);
-                        });
-
+                        console.log("lat = ", lat, "long = ", long);
+                        MapUtilsService.addMarker(lat / 100000, long / 100000, hashes[1], text, $scope.mymap);
                     });
             }).catch(function (err) {
                 if (err) {
@@ -99,38 +87,8 @@ app.controller("MainController", function ($scope, MapUtilsService) {
 
 
     $scope.update = function () {
+       
         MapUtilsService.addAllMessagesOnTheMap($scope.mymap, SmartTrace);
-    }
-
-    //add new media message to the map
-    $scope.add = function () {
-        let file = $scope.myFile;
-        let text = "hello world";
-        let lat = 37.775;
-        let long = -122.419;
-        let self = this;
-
-        //var input1 = angular.element(document.querySelector('#file1'));
-        Promise.all([EmbarkJS.Storage.saveText(text), EmbarkJS.Storage.uploadFile(file)])
-            .then(hashes => {
-                SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long, { gas: 500000 })
-                    .then(function (value) {
-                        self.lat += 0.2;
-                        self.long += 0.2;
-                        console.log("value = ", value);
-                        MapUtilsService.addMarker(lat, long, hashes[1], text, $scope.mymap);
-
-                        SmartTrace.getMsgsCount().then(function (data) {
-                            let length = data.toNumber();
-                            console.log("number of messages = ", length);
-                        });
-
-                    });
-            }).catch(function (err) {
-                if (err) {
-                    console.log("IPFS save file Error => " + err.message);
-                }
-            })
     }
 
 });
