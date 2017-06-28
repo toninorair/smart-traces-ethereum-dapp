@@ -7,7 +7,7 @@
 The following functionality is completed:
 
 * Users can add new messages on the map. Message contains text and media data.
-* Users can add private and public messages. Public messages are open for everyone, private messages can be seen only by owners and recepients.
+* Users can add private and public messages. Public messages are open for everyone, private messages can be seen only by owners and recipients.
 
 The following functionality can be added:
 * Expiration date for messages
