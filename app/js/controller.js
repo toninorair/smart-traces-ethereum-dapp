@@ -2,21 +2,28 @@ app.controller('MainController', function ($scope, $window, SmartTraceService, c
     $scope.init = function () {
         console.log('Scope initialization');
         $scope.isPublic = true;
-        $scope.mymap = L.map('mapid', { doubleClickZoom: false }).setView([config.START_LAT, config.START_LNG], config.MAP_ZOOM);
-        L.tileLayer(config.MAP_LINK, { attribution: '', maxZoom: config.MAP_ZOOM, id: 'mapbox.streets'
-        }).addTo($scope.mymap);
-
-        $scope.mymap.on('click', onMapClick);
+        initMap();
     }
-
 
     $window.onload = function (e) {
         console.log('Scope initialization finished');
         SmartTraceService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 
+    $scope.update = function () {
+        $scope.mymap.remove();
+        initMap();
+        SmartTraceService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
+    }
 
-    let onMapClick = function (e) {
+    function initMap() {
+        $scope.mymap = L.map('mapid', { doubleClickZoom: false }).setView([config.START_LAT, config.START_LNG], config.MAP_ZOOM);
+        L.tileLayer(config.MAP_LINK, { attribution: '', maxZoom: config.MAP_ZOOM, id: 'mapbox.streets' })
+            .addTo($scope.mymap);
+        $scope.mymap.on('click', onMapClick);
+    }
+
+    function onMapClick(e) {
         if (!$scope.myFile || !$scope.messageText) {
             alert('Please set up message text and media file');
             return;
@@ -27,17 +34,12 @@ app.controller('MainController', function ($scope, $window, SmartTraceService, c
             return;
         }
 
-        SmartTraceService.addNewMsgOnTheMap($scope.mymap, SmartTrace, { file: $scope.myFile, 
-            lat: e.latlng.lat, long: e.latlng.lng, 
-            text: $scope.messageText, public: $scope.isPublic, recepient: $scope.isPublic ? '' : $scope.recepient });
-
-       
+        SmartTraceService.addNewMsgOnTheMap($scope.mymap, SmartTrace, {
+            file: $scope.myFile,
+            lat: e.latlng.lat, long: e.latlng.lng,
+            text: $scope.messageText, public: $scope.isPublic, recepient: $scope.isPublic ? '' : $scope.recepient
+        });
     }
-
-    $scope.seeAll = function () {
-        SmartTraceService.addAllMessagesOnTheMap($scope.mymap, SmartTrace);
-    }
-
 });
 
 

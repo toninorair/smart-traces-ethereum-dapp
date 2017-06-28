@@ -1,6 +1,6 @@
 app.service('SmartTraceService', function (config) {
     var service = this;
-
+  
     service.addNewMsgOnTheMap = function (map, contract, info) {
         let lat = Math.trunc(info.lat * config.PRECISION);
         let long = Math.trunc(info.long * config.PRECISION);
@@ -84,7 +84,7 @@ app.service('SmartTraceService', function (config) {
     }
 
     function addMarker(lat, long, mediaHash, text, mymap) {
-        var marker = L.marker([lat, long]).addTo(mymap);
+        let marker = L.marker([lat, long]).addTo(mymap);
         let fullText = `${text}<br><a href=${formIPFSLink(mediaHash)}>Media</a>`;
         marker.bindPopup(fullText).openPopup();
     }
