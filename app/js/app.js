@@ -4,6 +4,12 @@ var app = angular.module('ethereum-maps-app', []).
         EmbarkJS.Storage.setProvider('ipfs', { server: 'localhost', port: '5001' });
     }]);
 
+// app.constant('config', {
+//     appName: ‘My App’,
+//     appVersion: 2.0,
+//     apiUrl: ‘http://www.google.com?api’
+// });
+
 app.service('MapUtilsService', function () {
     var service = this;
     service.addAllMessagesOnTheMap = function (map) {
@@ -65,7 +71,7 @@ app.service('MapUtilsService', function () {
 });
 
 
-app.controller("MainController", function ($scope, $window, MapUtilsService, $timeout) {
+app.controller("MainController", function ($scope, $window, MapUtilsService) {
     $scope.init = function () {
         console.log("Scope initialization");
         $scope.isPublic = true;
@@ -86,9 +92,17 @@ app.controller("MainController", function ($scope, $window, MapUtilsService, $ti
     }
 
 
-
     let onMapClick = function (e) {
-        console.log('on map clicked');
+        if (!$scope.myFile || !$scope.messageText) {
+            alert("Please set up message text and media file");
+            return;
+        }
+
+        if (!$scope.isPublic && !$scope.recepient) {
+            alert("Please set up recepient of the message or make it public");
+            return;
+        }
+
         let file = $scope.myFile;
         let lat = Math.trunc(e.latlng.lat * 100000);
         let long = Math.trunc(e.latlng.lng * 100000);
