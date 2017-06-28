@@ -78568,51 +78568,65 @@ app.service('SmartTraceService', function (config) {
                 let textHash = hashes[1];
                 contract.addMediaMsg(mediaHash, textHash, lat, long,
                     info.recepient, info.public, { gas: config.GAS_PER_OP })
-                    .then(function (value) {
+                    .then(value => {
                         console.log('value = ', value);
-                        service.addMarker(lat / config.PRECISION, long / config.PRECISION, mediaHash, info.text, map);
+                        addMarker(lat / config.PRECISION, long / config.PRECISION, mediaHash, info.text, map);
+                    }).catch(err => {
+                        errHelper('Add media message error => ', err);
                     });
-            }).catch(function (err) {
-                if (err) {
-                    console.log('IPFS save file Error => ' + err.message);
-                }
+            }).catch(err => {
+                errHelper('IPFS save file error => ', err);
             });
 
     }
 
     service.addAllMessagesOnTheMap = function (map, contract) {
-        contract.getMsgsCount().then(function (data) {
+        contract.getMsgsCount().then(data => {
             let length = data.toNumber();
             console.log('Number of saved messages = ', length);
             for (i = 0; i < length; i++) {
-                contract.getMediaMsg(i).then(function (data) {
-                    service.addMessageOnMap(data, map);
-                });
+                contract.getMediaMsg(i).then(data => {
+                    addMessageOnMap(data, map);
+                }).catch(err => {
+                    errHelper('Get media message error => ', err);
+                })
             }
+        }).catch(err => {
+            errHelper('Add media message count => ', err);
         });
     }
 
     service.addAllSelectedMessagesOnTheMap = function (map, contract) {
-        contract.getAllMessages(40, { gas: config.GAS_PER_OP }).then(function (data) {
+        contract.getAllMessages(40, { gas: config.GAS_PER_OP }).then(data => {
             let indexArr = data[0];
             let count = data[1].toNumber();
             console.log('Running add all selected images with count = ', count);
 
             for (let i = 0; i < count; i++) {
                 console.log('selected message index = ', indexArr[i]);
-                contract.getMediaMsg(indexArr[i]).then(function (data) {
-                    service.addMessageOnMap(data, map);
-                });
+                contract.getMediaMsg(indexArr[i]).then(data => {
+                    addMessageOnMap(data, map);
+                }).catch(err => {
+                    errHelper('Get media message error => ', err);
+                })
             }
+        }).catch(err => {
+            errHelper('Get all messages error => ', err);
         });
 
     }
 
-    service.formIPFSLink = function (mediaHash) {
+    function errHelper(message, err) {
+        if (err) {
+            console.log(message + err.message);
+        }
+    }
+
+    function formIPFSLink(mediaHash) {
         return `${config.IPFS_URL}${mediaHash}`;
     }
 
-    service.addMessageOnMap = function (data, mymap) {
+    function addMessageOnMap(data, mymap) {
         let account = data[0];
         let mediaHash = data[1];
         let textHash = data[2];
@@ -78620,14 +78634,14 @@ app.service('SmartTraceService', function (config) {
         let long = data[4] / config.PRECISION;
         console.log('account = ', account);
 
-        EmbarkJS.Storage.get(textHash).then(function (messageText) {
-            service.addMarker(lat, long, mediaHash, messageText, mymap);
+        EmbarkJS.Storage.get(textHash).then(messageText => {
+            addMarker(lat, long, mediaHash, messageText, mymap);
         });
     }
 
-    service.addMarker = function (lat, long, mediaHash, text, mymap) {
+    function addMarker(lat, long, mediaHash, text, mymap) {
         var marker = L.marker([lat, long]).addTo(mymap);
-        let fullText = `${text}<br><a href=${service.formIPFSLink(mediaHash)}>Media</a>`;
+        let fullText = `${text}<br><a href=${formIPFSLink(mediaHash)}>Media</a>`;
         marker.bindPopup(fullText).openPopup();
     }
 

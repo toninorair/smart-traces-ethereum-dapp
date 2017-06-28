@@ -71,6 +71,8 @@ h1 {
 
 .info-label{
   color: #5CAB7D;
+  font-size: 15px;
+  margin-top: 15px;
 }
 
 .done:hover{
