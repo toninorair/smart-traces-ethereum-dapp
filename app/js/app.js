@@ -20,7 +20,7 @@ app.service('MapUtilsService', function () {
     }
 
     service.addAllSelectedMessagesOnTheMap = function (map, contract) {
-       
+
         contract.getAllMessages(40, { gas: 500000 }).then(function (data) {
             let indexArr = data[0];
             let count = data[1].toNumber();
@@ -42,10 +42,12 @@ app.service('MapUtilsService', function () {
 
     service.addMessageOnMap = function (data, mymap) {
         console.log("Add message on map");
+        let account = data[0];
         let mediaHash = data[1];
         let textHash = data[2];
         let lat = data[3] / 100000;
         let long = data[4] / 100000;
+        console.log("account = ", account);
         console.log("lat = ", data[3], " long = ", data[4]);
         console.log("lat = ", lat, "long = ", long);
 
@@ -89,8 +91,9 @@ app.controller("MainController", function ($scope, MapUtilsService) {
 
         Promise.all([EmbarkJS.Storage.saveText(text), EmbarkJS.Storage.uploadFile(file)])
             .then(hashes => {
+                console.log("hashes = ", hashes);
                 SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long,
-                    '0x692a25d972105fa787d776e964fb1b40baa97552', true, { gas: 500000 })
+                    $scope.inputValue, false, { gas: 500000 })
                     .then(function (value) {
                         console.log("value = ", value);
                         console.log("lat = ", lat, "long = ", long);
@@ -105,6 +108,7 @@ app.controller("MainController", function ($scope, MapUtilsService) {
 
 
     $scope.update = function () {
+        console.log("here");
         MapUtilsService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 

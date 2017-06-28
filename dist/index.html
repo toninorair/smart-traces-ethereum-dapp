@@ -15,6 +15,8 @@
     <br>
     <div id='content' ng-controller='MainController' ng-init="init()">
         <br><br>
+        <input type='text' ng-model='inputValue'/>{{inputValue}}
+        <br><br>
         <input type="file" file-model="myFile" />
         <button ng-click="update()">Update</button>
     </div>
