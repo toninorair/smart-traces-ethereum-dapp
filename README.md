@@ -1,20 +1,23 @@
 # Project  - *Ethereum IPFS DApp, Geo media messages*
 
-**Geo media messages** is an Embark DApp app that allows a user to add private and public media messages on the map.
+**Geo media messages** is an DApp app that allows a user to add private and public media messages on the map. Simple contract *SmartTrace* is written in Solidity. Embark framework is used for development. [Glide](https://github.com/bumptech/glide)
 
 ## User Stories
 
 The following functionality is completed:
 
-* User can **search for news article** by specifying a query and launching a search
-* User can click on "settings" which allows selection of **advanced search options** to filter results
-* User can configure advanced search filters such as
+* Users can add new messages on the map. Message contains text and media data. Data is stored in IPFS.
+* Users can add private and public messages. Public messages are open for everyone, private messages can be seen only by owners and recepients.
 
 The following functionality can be added:
+* Expiration date for messages
+* Like / dislike of messages 
+* Delete messages with big number of dislikes comparing to number of likes.
 
 
+## DApp
 
-
+<img src='https://github.com/antonina-cherednichenko/smart-traces-ethereum-dapp/blob/master/app.gif' title='Image' width='' alt='Image' />
 
 
 ## Video Walkthrough
@@ -22,20 +25,3 @@ The following functionality can be added:
 Here's a walkthrough of implemented DApp:
 
 <img src='https://github.com/antonina-cherednichenko/smart-traces-ethereum-dapp/blob/master/app.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-
-## Notes
-
-1. What is better ButterKnife or a binding framework?
-2. How to provide unique elements in a RecyclerView?
-
-## Frameworks and libraries used
-
-- [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
-- [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
-- [ButterKnife](http://jakewharton.github.io/butterknife/)
-- [Glide](https://github.com/bumptech/glide)
-- [GSON](https://github.com/google/gson)
-- [Retrofit](http://square.github.io/retrofit/) 
-- [Parceler](https://github.com/johncarl81/parceler)
-- [Chrome Custom Tabs](https://github.com/GoogleChrome/custom-tabs-client)
