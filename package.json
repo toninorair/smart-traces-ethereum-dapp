@@ -11,5 +11,8 @@
   "devDependencies": {
     "embark": "^2.4.2",
     "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "angular-ui-bootstrap": "^2.5.0"
   }
 }

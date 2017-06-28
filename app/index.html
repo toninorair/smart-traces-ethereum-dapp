@@ -1,25 +1,87 @@
+<html>
+
 <head>
     <title>Ethereum simple app</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript"></script>
-    <script src="js/app.js" type="text/javascript"></script>
+
+    <meta charset="UTF-8">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+
+    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js'></script>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
         crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
         crossorigin=""></script>
+    <script src="js/app.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="css/app.css">
+
+
+
 </head>
 
-<body ng-app='ethereum-maps-app'>
+<!--<body ng-controller='MainController' ng-app='ethereum-maps-app'>-->
+
+<body ng-controller='MainController' ng-app='ethereum-maps-app' ng-init="init()">
 
     <div id="mapid"></div>
-    <br>
-    <div id='content' ng-controller='MainController' ng-init="init()">
+
+    <div class="container">
+        <div id="map-message">
+            <div class="map-screen">
+                <div class="space-bot text-center">
+                    <h1>Save Message</h1>
+                    <div class="divider"></div>
+                </div>
+                <form class="form-message" data-toggle="validator">
+
+                    <div class="input-field col s6">
+                        <input id="message-text" type="text" required>
+                        <label for="message-text">Message</label>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <input id="file-upload" type="file" file-model="myFile" required/>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <input id="is-public" type="checkbox" ng-checked="true" ng-model="isPublic">
+                        <label for="is-public">Public message?</label>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <input id="last-name" type="text" ng-disabled="isPublic">
+                        <label for="last-name">Recepient</label>
+                    </div>
+
+
+                    <div class="space-top text-center">
+                        <button type="button" class="waves-effect waves-light btn done">
+               <i class="material-icons left">done</i> Update
+               </button>
+                        <button type="button" class="waves-effect waves-light btn done">
+               <i class="material-icons left">done</i>See all
+               </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--<div ng-controller='MainController' id='content' ng-init="init()">
         <br><br>
-        <input type='text' ng-model='inputValue'/>{{inputValue}}
+        <input type='text' ng-model='inputValue' />{{inputValue}}
         <br><br>
         <input type="file" file-model="myFile" />
         <button ng-click="update()">Update</button>
-    </div>
+    </div>-->
 </body>
 
 </html>
