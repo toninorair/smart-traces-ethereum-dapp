@@ -37,11 +37,10 @@ app.controller("MainController", function ($scope, $window, SmartTraceService) {
             return;
         }
 
-        let lat = Math.trunc(e.latlng.lat * 100000);
-        let long = Math.trunc(e.latlng.lng * 100000);
         let recepient = $scope.isPublic ? '' : $scope.recepient;
 
-        SmartTraceService.addNewMsgOnTheMap($scope.mymap, SmartTrace, { file: $scope.myFile, lat: lat, long: long, 
+        SmartTraceService.addNewMsgOnTheMap($scope.mymap, SmartTrace, { file: $scope.myFile, 
+            lat: e.latlng.lat, long: e.latlng.lng, 
             text: $scope.messageText, public: $scope.isPublic, recepient: recepient });
 
        

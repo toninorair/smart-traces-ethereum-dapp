@@ -1,19 +1,20 @@
-app.service('SmartTraceService', function () {
+app.service('SmartTraceService', function (config) {
     var service = this;
 
-
     service.addNewMsgOnTheMap = function (map, contract, info) {
-        console.log("info = ", info);
+        let lat = Math.trunc(info.lat * config.PRECISION);
+        let long = Math.trunc(info.long * config.PRECISION);
+
         Promise.all([EmbarkJS.Storage.uploadFile(info.file), EmbarkJS.Storage.saveText(info.text)])
             .then(hashes => {
                 console.log("hashes = ", hashes);
                 let mediaHash = hashes[0];
                 let textHash = hashes[1];
-                contract.addMediaMsg(mediaHash, textHash, info.lat, info.long,
-                    info.recepient, info.public, { gas: 700000 })
+                contract.addMediaMsg(mediaHash, textHash, lat, long,
+                    info.recepient, info.public, { gas: config.GAS_PER_OP })
                     .then(function (value) {
                         console.log("value = ", value);
-                        service.addMarker(info.lat / 100000, info.long / 100000, mediaHash, info.text, map);
+                        service.addMarker(lat / config.PRECISION, long / config.PRECISION, mediaHash, info.text, map);
                     });
             }).catch(function (err) {
                 if (err) {
@@ -26,7 +27,7 @@ app.service('SmartTraceService', function () {
     service.addAllMessagesOnTheMap = function (map, contract) {
         contract.getMsgsCount().then(function (data) {
             let length = data.toNumber();
-            console.log("number of messages = ", length);
+            console.log("Number of saved messages = ", length);
             for (i = 0; i < length; i++) {
                 contract.getMediaMsg(i).then(function (data) {
                     service.addMessageOnMap(data, map);
@@ -36,7 +37,7 @@ app.service('SmartTraceService', function () {
     }
 
     service.addAllSelectedMessagesOnTheMap = function (map, contract) {
-        contract.getAllMessages(40, { gas: 500000 }).then(function (data) {
+        contract.getAllMessages(40, { gas: config.GAS_PER_OP }).then(function (data) {
             let indexArr = data[0];
             let count = data[1].toNumber();
             console.log("Running add all selected images with count = ", count);
@@ -59,8 +60,8 @@ app.service('SmartTraceService', function () {
         let account = data[0];
         let mediaHash = data[1];
         let textHash = data[2];
-        let lat = data[3] / 100000;
-        let long = data[4] / 100000;
+        let lat = data[3] / config.PRECISION;
+        let long = data[4] / config.PRECISION;
         console.log("account = ", account);
 
         EmbarkJS.Storage.get(textHash).then(function (messageText) {
