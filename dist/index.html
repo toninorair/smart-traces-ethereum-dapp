@@ -27,8 +27,6 @@
 
 </head>
 
-<!--<body ng-controller='MainController' ng-app='ethereum-maps-app'>-->
-
 <body ng-controller='MainController' ng-app='ethereum-maps-app' ng-init="init()">
 
     <div id="mapid"></div>
@@ -43,7 +41,7 @@
                 <form class="form-message" data-toggle="validator">
 
                     <div class="input-field col s6">
-                        <input id="message-text" type="text" required>
+                        <input id="message-text" type="text" ng-model="messageText" required>
                         <label for="message-text">Message</label>
                     </div>
 
@@ -57,8 +55,8 @@
                     </div>
 
                     <div class="input-field col s6">
-                        <input id="last-name" type="text" ng-disabled="isPublic">
-                        <label for="last-name">Recepient</label>
+                        <input id="recepient" type="text" ng-disabled="isPublic" ng-model="recepient">
+                        <label for="recepient">Recepient</label>
                     </div>
 
 

@@ -14,6 +14,7 @@ contract SmartTrace {
   MediaMessage[] public msgs;
 
   function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long, address recepient, bool publicMessage) {
+        if (publicMessage) recepient = msg.sender;
         MediaMessage memory temp = MediaMessage(msg.sender, media_hash, text_hash,
          lat, long, recepient, publicMessage);
         msgs.push(temp);
