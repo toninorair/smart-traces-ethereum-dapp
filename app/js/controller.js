@@ -1,9 +1,3 @@
-var app = angular.module('ethereum-maps-app', []).
-    run(['$rootScope', function ($rootScope) {
-        //Initial initialization here
-        EmbarkJS.Storage.setProvider('ipfs', { server: 'localhost', port: '5001' });
-    }]);
-
 // app.constant('config', {
 //     appName: ‘My App’,
 //     appVersion: 2.0,
@@ -11,7 +5,7 @@ var app = angular.module('ethereum-maps-app', []).
 // });
 
 
-app.controller("MainController", function ($scope, $window, MapUtilsService) {
+app.controller("MainController", function ($scope, $window, SmartTraceService) {
     $scope.init = function () {
         console.log("Scope initialization");
         $scope.isPublic = true;
@@ -28,7 +22,7 @@ app.controller("MainController", function ($scope, $window, MapUtilsService) {
 
     $window.onload = function (e) {
         console.log("Scope initialization finished");
-        MapUtilsService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
+        SmartTraceService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 
 
@@ -58,7 +52,7 @@ app.controller("MainController", function ($scope, $window, MapUtilsService) {
                     .then(function (value) {
                         console.log("value = ", value);
                         console.log("lat = ", lat, "long = ", long);
-                        MapUtilsService.addMarker(lat / 100000, long / 100000, hashes[1], text, $scope.mymap);
+                        SmartTraceService.addMarker(lat / 100000, long / 100000, hashes[1], text, $scope.mymap);
                     });
             }).catch(function (err) {
                 if (err) {
@@ -69,13 +63,10 @@ app.controller("MainController", function ($scope, $window, MapUtilsService) {
 
 
     $scope.update = function () {
-        console.log("here");
-        MapUtilsService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
+        SmartTraceService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 
 });
-
-
 
 
 app.directive('fileModel', ['$parse', function ($parse) {
