@@ -69,6 +69,10 @@ h1 {
   background-color: #5CAB7D;
 }
 
+.info-label{
+  color: #5CAB7D;
+}
+
 .done:hover{
   background-color: #6dc793;
 }
