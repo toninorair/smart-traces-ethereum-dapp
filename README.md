@@ -1,6 +1,6 @@
 # Project  - *Ethereum IPFS DApp, Geo media messages*
 
-**Geo media messages** is an DApp app that allows a user to add private and public media messages on the map. Simple contract *SmartTrace* is written in [Solidity](https://github.com/ethereum/solidity). [Embark](https://github.com/iurimatias/embark-framework) framework is used for development. Media files and text messages are stored in [IPFS](https://ipfs.io/)
+**Geo media messages** is an DApp app that allows a user to add private and public media messages on the map. Simple contract *[SmartTrace](https://github.com/antonina-cherednichenko/smart-traces-ethereum-dapp/blob/master/app/contracts/SmartTrace.sol)* is written in [Solidity](https://github.com/ethereum/solidity). [Embark](https://github.com/iurimatias/embark-framework) framework is used for development. Media files and text messages are stored in [IPFS](https://ipfs.io/)
 
 ## User Stories
 
