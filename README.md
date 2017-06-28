@@ -6,9 +6,9 @@
 
 The following functionality is completed:
 
-* [X] User can **search for news article** by specifying a query and launching a search
-* [X] User can click on "settings" which allows selection of **advanced search options** to filter results
-* [X] User can configure advanced search filters such as
+* User can **search for news article** by specifying a query and launching a search
+* User can click on "settings" which allows selection of **advanced search options** to filter results
+* User can configure advanced search filters such as
 
 The following functionality can be added:
 
@@ -19,18 +19,17 @@ The following functionality can be added:
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented DApp:
 
-<img src='https://github.com/antonina-cherednichenko/NYTimesSearch/blob/master/video1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/antonina-cherednichenko/smart-traces-ethereum-dapp/blob/master/app.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
 1. What is better ButterKnife or a binding framework?
 2. How to provide unique elements in a RecyclerView?
 
-## Open-source libraries used
+## Frameworks and libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
