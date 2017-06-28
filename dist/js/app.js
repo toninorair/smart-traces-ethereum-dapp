@@ -78475,6 +78475,7 @@ SmartTrace = new EmbarkJS.Contract({abi: [{"constant":true,"inputs":[{"name":"ma
 EmbarkJS.Storage.setProvider('ipfs', {server: 'localhost', port: '5001'});
 
 EmbarkJS.Messages.setProvider('whisper');
+//AngularJS Application
 var app = angular.module('ethereum-maps-app', []).
     run(['$rootScope', function ($rootScope) {
         EmbarkJS.Storage.setProvider('ipfs', { server: 'localhost', port: '5001' });
@@ -78507,6 +78508,10 @@ app.controller('MainController', function ($scope, $window, SmartTraceService, c
         SmartTraceService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 
+    /**
+     * Nice to have this method for testing private messages functionality
+     * Recreate map and add all media messages for current user
+     */
     $scope.update = function () {
         $scope.mymap.remove();
         initMap();
@@ -78539,7 +78544,7 @@ app.controller('MainController', function ($scope, $window, SmartTraceService, c
     }
 });
 
-
+//Directive used for file upload
 app.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
@@ -78557,13 +78562,21 @@ app.directive('fileModel', ['$parse', function ($parse) {
 }]);
 
 
+//This service interacts with SmartTrace contract and show data on the map
 app.service('SmartTraceService', function (config) {
     var service = this;
 
+    /**
+    * Add media file and message to IPFS, saves message's data in contract storage
+    * @param map map instance
+    * @param {SmartTrace}  contract 
+    * @param info media message data - hashes of text and media, geo coordinates   
+    */
     service.addNewMsgOnTheMap = function (map, contract, info) {
         let lat = Math.trunc(info.lat * config.PRECISION);
         let long = Math.trunc(info.long * config.PRECISION);
 
+        //saving data to EmbarkJS.Storage - IPFS
         Promise.all([EmbarkJS.Storage.uploadFile(info.file), EmbarkJS.Storage.saveText(info.text)])
             .then(hashes => {
                 console.log('hashes = ', hashes);
@@ -78583,6 +78596,13 @@ app.service('SmartTraceService', function (config) {
 
     }
 
+    /**
+    * Retrieving all media messages saved in the contract. 
+    * Adding them on a map. 
+    * For testing purposes only, better to get only accessible for current user messages
+    * @param map map instance
+    * @param {SmartTrace}  contract    
+    */
     service.addAllMessagesOnTheMap = function (map, contract) {
         contract.getMsgsCount().then(data => {
             let length = data.toNumber();
@@ -78599,6 +78619,16 @@ app.service('SmartTraceService', function (config) {
         });
     }
 
+    /**
+    * Retrieving all ACCESSIBLE media messages saved in the contract. 
+    * Adding them on a map. 
+    * Message is accessible for a user if 
+    * 1. It's public message;
+    * 2. It is owned by this user;
+    * 3. User is a recepient of a message.
+    * @param map map instance
+    * @param {SmartTrace}  contract    
+    */
     service.addAllSelectedMessagesOnTheMap = function (map, contract) {
         contract.getAllMessages(config.MAX_MESSAGES, { gas: config.GAS_PER_OP }).then(data => {
             let indexArr = data[0];
@@ -78625,6 +78655,7 @@ app.service('SmartTraceService', function (config) {
         }
     }
 
+    //Forms proper IPFS link for media hash
     function formIPFSLink(mediaHash) {
         return `${config.IPFS_URL}${mediaHash}`;
     }
@@ -78637,14 +78668,18 @@ app.service('SmartTraceService', function (config) {
         let long = data[4] / config.PRECISION;
         console.log('account = ', account);
 
+        //retrieving saved in IPFS message 
         EmbarkJS.Storage.get(textHash).then(messageText => {
             addMarker(lat, long, mediaHash, messageText, mymap);
+        }).catch(err => {
+            errHelper('IPFS get text message error => ', err);
         });
     }
 
+    //add marker to the map
     function addMarker(lat, long, mediaHash, text, mymap) {
         let marker = L.marker([lat, long]).addTo(mymap);
-        let fullText = `${text}<br><a href=${formIPFSLink(mediaHash)}>Media</a>`;
+        let fullText = `<b><i>${text}</b></i><br>Your saved <a href=${formIPFSLink(mediaHash)}>Media</a>`;
         marker.bindPopup(fullText).openPopup();
     }
 

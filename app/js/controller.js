@@ -10,6 +10,10 @@ app.controller('MainController', function ($scope, $window, SmartTraceService, c
         SmartTraceService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 
+    /**
+     * Nice to have this method for testing private messages functionality
+     * Recreate map and add all media messages for current user
+     */
     $scope.update = function () {
         $scope.mymap.remove();
         initMap();
@@ -42,7 +46,7 @@ app.controller('MainController', function ($scope, $window, SmartTraceService, c
     }
 });
 
-
+//Directive used for file upload
 app.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
