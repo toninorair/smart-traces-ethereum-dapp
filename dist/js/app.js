@@ -78485,6 +78485,7 @@ app.constant('config', {
     GAS_PER_OP: 500000,
     PRECISION: 100000,
     IPFS_URL: 'http://localhost:8080/ipfs/',
+    MAX_MESSAGES: 40,
     MAP_ZOOM: 13,
     MAP_MAX_ZOOM: 8,
     START_LAT: 37.775,
@@ -78558,7 +78559,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
 
 app.service('SmartTraceService', function (config) {
     var service = this;
-  
+
     service.addNewMsgOnTheMap = function (map, contract, info) {
         let lat = Math.trunc(info.lat * config.PRECISION);
         let long = Math.trunc(info.long * config.PRECISION);
@@ -78599,7 +78600,7 @@ app.service('SmartTraceService', function (config) {
     }
 
     service.addAllSelectedMessagesOnTheMap = function (map, contract) {
-        contract.getAllMessages(40, { gas: config.GAS_PER_OP }).then(data => {
+        contract.getAllMessages(config.MAX_MESSAGES, { gas: config.GAS_PER_OP }).then(data => {
             let indexArr = data[0];
             let count = data[1].toNumber();
             console.log('Running add all selected images with count = ', count);

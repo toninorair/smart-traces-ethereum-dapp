@@ -2,6 +2,7 @@ app.constant('config', {
     GAS_PER_OP: 500000,
     PRECISION: 100000,
     IPFS_URL: 'http://localhost:8080/ipfs/',
+    MAX_MESSAGES: 40,
     MAP_ZOOM: 13,
     MAP_MAX_ZOOM: 8,
     START_LAT: 37.775,

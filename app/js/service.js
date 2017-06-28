@@ -1,6 +1,6 @@
 app.service('SmartTraceService', function (config) {
     var service = this;
-  
+
     service.addNewMsgOnTheMap = function (map, contract, info) {
         let lat = Math.trunc(info.lat * config.PRECISION);
         let long = Math.trunc(info.long * config.PRECISION);
@@ -41,7 +41,7 @@ app.service('SmartTraceService', function (config) {
     }
 
     service.addAllSelectedMessagesOnTheMap = function (map, contract) {
-        contract.getAllMessages(40, { gas: config.GAS_PER_OP }).then(data => {
+        contract.getAllMessages(config.MAX_MESSAGES, { gas: config.GAS_PER_OP }).then(data => {
             let indexArr = data[0];
             let count = data[1].toNumber();
             console.log('Running add all selected images with count = ', count);
