@@ -19,6 +19,23 @@ app.service('MapUtilsService', function () {
         });
     }
 
+    service.addAllSelectedMessagesOnTheMap = function (map, contract) {
+       
+        contract.getAllMessages(40, { gas: 500000 }).then(function (data) {
+            let indexArr = data[0];
+            let count = data[1].toNumber();
+            console.log("Running add all selected images with count = ", count);
+
+            for (let i = 0; i < count; i++) {
+                console.log("element", indexArr[i]);
+                contract.getMediaMsg(indexArr[i]).then(function (data) {
+                    service.addMessageOnMap(data, map);
+                });
+            }
+        });
+
+    }
+
     service.formIPFSLink = function (mediaHash) {
         return `http://localhost:8080/ipfs/${mediaHash}`;
     }
@@ -65,14 +82,15 @@ app.controller("MainController", function ($scope, MapUtilsService) {
         console.log('on map clicked');
         let file = $scope.myFile;
         let text = "hello world";
-        let lat = Math.trunc(e.latlng.lat * 100000) ;
+        let lat = Math.trunc(e.latlng.lat * 100000);
         let long = Math.trunc(e.latlng.lng * 100000);
 
 
 
         Promise.all([EmbarkJS.Storage.saveText(text), EmbarkJS.Storage.uploadFile(file)])
             .then(hashes => {
-                SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long , { gas: 500000 })
+                SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long,
+                    '0x692a25d972105fa787d776e964fb1b40baa97552', true, { gas: 500000 })
                     .then(function (value) {
                         console.log("value = ", value);
                         console.log("lat = ", lat, "long = ", long);
@@ -87,8 +105,7 @@ app.controller("MainController", function ($scope, MapUtilsService) {
 
 
     $scope.update = function () {
-       
-        MapUtilsService.addAllMessagesOnTheMap($scope.mymap, SmartTrace);
+        MapUtilsService.addAllSelectedMessagesOnTheMap($scope.mymap, SmartTrace);
     }
 
 });

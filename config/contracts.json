@@ -1,9 +1,9 @@
 {
   "default": {
-    "gas": 90000000000,
+    "gas": "auto",
     "contracts": {
       "SmartTrace": {
-        "gas" : 800000
+        "gas" : 999000
         
       }
     }

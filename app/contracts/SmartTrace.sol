@@ -7,14 +7,34 @@ contract SmartTrace {
 		string text_hash;
 		int64 lat;
 		int64 long;
+    address recepient;
+    bool publicMessage;
 	}
 
   MediaMessage[] public msgs;
 
-  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long) {
-        MediaMessage memory temp = MediaMessage(msg.sender, media_hash, text_hash, lat, long);
+  function addMediaMsg(string media_hash, string text_hash, int64 lat, int64 long, address recepient, bool publicMessage) {
+        MediaMessage memory temp = MediaMessage(msg.sender, media_hash, text_hash,
+         lat, long, recepient, publicMessage);
         msgs.push(temp);
         
+  }
+
+  function getAllMessages(uint max) constant returns(uint[], uint) {
+    uint[] memory ids = new uint[](max);
+    uint count = 0;
+    for (var i = 0; i < msgs.length; i++){
+      if(msgs[i].sender == msg.sender) {
+          ids[count++] = i;
+      } else if(msgs[i].recepient == msg.sender) {
+          ids[count++] = i;
+      } else if (msgs[i].publicMessage) {
+         ids[count++] = i;
+      }
+    }
+
+    return (ids, count);
+
   }
 
   function getMsgsCount() constant returns(uint){
