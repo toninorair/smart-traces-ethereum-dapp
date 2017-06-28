@@ -27,11 +27,12 @@ contract SmartTrace {
         
   }
 
-  //Returns all accessible message for current user
+  //Returns all accessible message for current user and their number
   //Message is accessible for a user if
   //1. It's public message
   //2. It is owned by this user
   //3. User is a recepient of a message
+  //`max_count` detects max possible number of indexes
   function getAllMessages(uint max_count) constant returns(uint[], uint) {
     uint[] memory ids = new uint[](max_count);
     uint count = 0;
