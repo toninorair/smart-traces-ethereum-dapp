@@ -37,28 +37,14 @@ app.controller("MainController", function ($scope, $window, SmartTraceService) {
             return;
         }
 
-        let file = $scope.myFile;
         let lat = Math.trunc(e.latlng.lat * 100000);
         let long = Math.trunc(e.latlng.lng * 100000);
-        let text = $scope.messageText;
-        let isPublic = $scope.isPublic;
-        let recepient = isPublic ? '' : $scope.recepient;
+        let recepient = $scope.isPublic ? '' : $scope.recepient;
 
-        Promise.all([EmbarkJS.Storage.saveText(text), EmbarkJS.Storage.uploadFile(file)])
-            .then(hashes => {
-                console.log("hashes = ", hashes);
-                SmartTrace.addMediaMsg(hashes[1], hashes[0], lat, long,
-                    recepient, isPublic, { gas: 500000 })
-                    .then(function (value) {
-                        console.log("value = ", value);
-                        console.log("lat = ", lat, "long = ", long);
-                        SmartTraceService.addMarker(lat / 100000, long / 100000, hashes[1], text, $scope.mymap);
-                    });
-            }).catch(function (err) {
-                if (err) {
-                    console.log("IPFS save file Error => " + err.message);
-                }
-            })
+        SmartTraceService.addNewMsgOnTheMap($scope.mymap, SmartTrace, { file: $scope.myFile, lat: lat, long: long, 
+            text: $scope.messageText, public: $scope.isPublic, recepient: recepient });
+
+       
     }
 
 

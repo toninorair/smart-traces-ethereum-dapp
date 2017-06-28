@@ -1,6 +1,28 @@
 app.service('SmartTraceService', function () {
     var service = this;
 
+
+    service.addNewMsgOnTheMap = function (map, contract, info) {
+        console.log("info = ", info);
+        Promise.all([EmbarkJS.Storage.uploadFile(info.file), EmbarkJS.Storage.saveText(info.text)])
+            .then(hashes => {
+                console.log("hashes = ", hashes);
+                let mediaHash = hashes[0];
+                let textHash = hashes[1];
+                contract.addMediaMsg(mediaHash, textHash, info.lat, info.long,
+                    info.recepient, info.public, { gas: 700000 })
+                    .then(function (value) {
+                        console.log("value = ", value);
+                        service.addMarker(info.lat / 100000, info.long / 100000, mediaHash, info.text, map);
+                    });
+            }).catch(function (err) {
+                if (err) {
+                    console.log("IPFS save file Error => " + err.message);
+                }
+            });
+
+    }
+
     service.addAllMessagesOnTheMap = function (map, contract) {
         contract.getMsgsCount().then(function (data) {
             let length = data.toNumber();
