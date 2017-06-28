@@ -7,18 +7,18 @@ app.service('SmartTraceService', function (config) {
 
         Promise.all([EmbarkJS.Storage.uploadFile(info.file), EmbarkJS.Storage.saveText(info.text)])
             .then(hashes => {
-                console.log("hashes = ", hashes);
+                console.log('hashes = ', hashes);
                 let mediaHash = hashes[0];
                 let textHash = hashes[1];
                 contract.addMediaMsg(mediaHash, textHash, lat, long,
                     info.recepient, info.public, { gas: config.GAS_PER_OP })
                     .then(function (value) {
-                        console.log("value = ", value);
+                        console.log('value = ', value);
                         service.addMarker(lat / config.PRECISION, long / config.PRECISION, mediaHash, info.text, map);
                     });
             }).catch(function (err) {
                 if (err) {
-                    console.log("IPFS save file Error => " + err.message);
+                    console.log('IPFS save file Error => ' + err.message);
                 }
             });
 
@@ -27,7 +27,7 @@ app.service('SmartTraceService', function (config) {
     service.addAllMessagesOnTheMap = function (map, contract) {
         contract.getMsgsCount().then(function (data) {
             let length = data.toNumber();
-            console.log("Number of saved messages = ", length);
+            console.log('Number of saved messages = ', length);
             for (i = 0; i < length; i++) {
                 contract.getMediaMsg(i).then(function (data) {
                     service.addMessageOnMap(data, map);
@@ -40,10 +40,10 @@ app.service('SmartTraceService', function (config) {
         contract.getAllMessages(40, { gas: config.GAS_PER_OP }).then(function (data) {
             let indexArr = data[0];
             let count = data[1].toNumber();
-            console.log("Running add all selected images with count = ", count);
+            console.log('Running add all selected images with count = ', count);
 
             for (let i = 0; i < count; i++) {
-                console.log("element", indexArr[i]);
+                console.log('selected message index = ', indexArr[i]);
                 contract.getMediaMsg(indexArr[i]).then(function (data) {
                     service.addMessageOnMap(data, map);
                 });
@@ -53,7 +53,7 @@ app.service('SmartTraceService', function (config) {
     }
 
     service.formIPFSLink = function (mediaHash) {
-        return `http://localhost:8080/ipfs/${mediaHash}`;
+        return `${config.IPFS_URL}${mediaHash}`;
     }
 
     service.addMessageOnMap = function (data, mymap) {
@@ -62,7 +62,7 @@ app.service('SmartTraceService', function (config) {
         let textHash = data[2];
         let lat = data[3] / config.PRECISION;
         let long = data[4] / config.PRECISION;
-        console.log("account = ", account);
+        console.log('account = ', account);
 
         EmbarkJS.Storage.get(textHash).then(function (messageText) {
             service.addMarker(lat, long, mediaHash, messageText, mymap);
@@ -71,7 +71,7 @@ app.service('SmartTraceService', function (config) {
 
     service.addMarker = function (lat, long, mediaHash, text, mymap) {
         var marker = L.marker([lat, long]).addTo(mymap);
-        let fullText = `${text}<a href=${service.formIPFSLink(mediaHash)}>Media</a>`;
+        let fullText = `${text}<br><a href=${service.formIPFSLink(mediaHash)}>Media</a>`;
         marker.bindPopup(fullText).openPopup();
     }
 

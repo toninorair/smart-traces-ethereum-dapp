@@ -24,7 +24,6 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
 
 
-
 </head>
 
 <body ng-controller='MainController' ng-app='ethereum-maps-app' ng-init="init()">
@@ -35,23 +34,23 @@
         <div id="map-message">
             <div class="map-screen">
                 <div class="space-bot text-center">
-                    <h1>Save Message</h1>
+                    <h1>GEO MEDIA Message</h1>
                     <div class="divider"></div>
                 </div>
                 <form class="form-message" data-toggle="validator">
 
                     <div class="input-field col s6">
-                        <input id="message-text" type="text" ng-model="messageText" required>
+                        <input id="message-text" type="text" ng-model="messageText" >
                         <label for="message-text">Message</label>
                     </div>
 
                     <div class="input-field col s6">
-                        <input id="file-upload" type="file" file-model="myFile" required/>
+                        <input id="file-upload" type="file" file-model="myFile"/>
                     </div>
 
                     <div class="input-field col s6">
                         <input id="is-public" type="checkbox" ng-checked="true" ng-model="isPublic">
-                        <label for="is-public">Public message?</label>
+                        <label for="is-public">Public message? OR</label>
                     </div>
 
                     <div class="input-field col s6">
@@ -61,12 +60,9 @@
 
 
                     <div class="space-top text-center">
-                        <button type="button" class="waves-effect waves-light btn done">
-               <i class="material-icons left">done</i> Update
-               </button>
-                        <button type="button" class="waves-effect waves-light btn done">
-               <i class="material-icons left">done</i>See all
-               </button>
+                        <button type="button" class="waves-effect waves-light btn done" ng-click="seeAll()">
+                        <i class="material-icons left">done</i> See all
+                        </button>
                     </div>
                 </form>
             </div>
