@@ -115,7 +115,7 @@ app.service('SmartTraceService', function (config) {
     //add marker to the map
     function addMarker(lat, long, mediaHash, text, mymap) {
         let marker = L.marker([lat, long]).addTo(mymap);
-        let fullText = `<b><i>${text}</b></i><br>Your saved <a href=${formIPFSLink(mediaHash)}>Media</a>`;
+        let fullText = `<b><i>${text}</b></i><br>Your <a href=${formIPFSLink(mediaHash)}>media</a>`;
         marker.bindPopup(fullText).openPopup();
     }
 
